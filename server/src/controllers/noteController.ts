@@ -34,6 +34,16 @@ export const getNoteById = async (req: AuthenticatedRequest, res: Response) => {
         return res.status(400).json({ message: "Invalid note id" });
     }
 };
+export const getNoteByUserId = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        if (!req.userId) return res.status(401).json({ message: "Unauthorized" });
+        const note = await NoteModel.find({ user: req.userId });
+        if (!note) return res.status(404).json({ message: "Notes not found" });
+        return res.status(200).json(note);
+    } catch (_err) {
+        return res.status(400).json({ message: "No Notes Found" });
+    }
+};
 
 export const updateNote = async (req: AuthenticatedRequest, res: Response) => {
     try {
