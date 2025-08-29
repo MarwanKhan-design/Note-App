@@ -8,26 +8,14 @@ const userSchema = new Schema(
     {
         name: { type: String, required: true, trim: true },
         email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-        passwordHash: { type: String, required: true }
+        OTP: { type: Number }
     },
     { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-    const user = this as any;
-    if (!user.isModified("passwordHash")) return next();
-    try {
-        const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-        user.passwordHash = await bcrypt.hash(user.passwordHash, salt);
-        next();
-    } catch (err) {
-        next(err as any);
-    }
-});
 
-userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-    return bcrypt.compare(candidatePassword, this.passwordHash);
-};
+
+
 
 userSchema.methods.generateJWT = function (): string {
     const payload = { sub: this._id.toString(), email: this.email };
