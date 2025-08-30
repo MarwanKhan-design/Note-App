@@ -4,12 +4,14 @@ import { connectdb } from "./connectdb";
 import userRoutes from "./routes/userRoutes";
 import noteRoutes from "./routes/noteRoutes";
 import { requireAuth } from "./middleware/requireAuth";
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express();
 
 // Middlewares
+app.use(cors({ origin: '*' }))
 app.use(express.json());
 
 // Routes
