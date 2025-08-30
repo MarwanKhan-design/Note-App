@@ -1,5 +1,4 @@
 const Signup = () => {
-    return <>Signup</>
+    return <>SignUp</>
 }
-
 export default Signup
