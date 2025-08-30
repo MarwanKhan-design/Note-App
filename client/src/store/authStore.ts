@@ -33,8 +33,8 @@ export const useAuthStore = create((set) => ({
     getToken: async (OTP: number, email: string) => {
         try {
             const res = await axios.post(`${API_URL}/verify`, { OTP, email })
-            set({ user: res.data?.user, token: res.data?.token })
-
+            set({ user: res.data?.user, token: res.data?.token, message: res.data?.message })
+            console.log(res.data)
             localStorage.setItem('token', res.data?.token)
             localStorage.setItem('user', res.data?.user)
 
