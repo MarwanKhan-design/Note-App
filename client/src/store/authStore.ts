@@ -13,20 +13,53 @@ export const useAuthStore = create<{
     message: string;
     token: string;
     isTokenValid: boolean;
-    loading: boolean;
     signup: (name: string, email: string) => Promise<void>;
     login: (email: string) => Promise<void>;
-    getToken: (OTP: number, email: string) => Promise<void>;
+    getToken: (OTP: number, email: string) => Promise<boolean | undefined>;
     checkToken: () => Promise<void>;
+    loading: boolean;
 }>((set) => ({
-    user: null,
+    loading: true,
+    user: null as User | null,
     message: '',
     token: '',
     isTokenValid: false,
-    loading: true, // start as loading
-    signup: async (name, email) => { /* unchanged */ },
-    login: async (email) => { /* unchanged */ },
-    getToken: async (OTP, email) => { /* unchanged */ },
+    signup: async (name: string, email: string) => {
+        try {
+            const res = await axios.post(`${API_URL}/signup`, { name, email })
+            set({ message: res.data?.message })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    login: async (email: string) => {
+        try {
+            const res = await axios.post(`${API_URL}/login`, { email })
+            set({ message: res.data?.message })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    getToken: async (OTP: number, email: string) => {
+        try {
+            const res = await axios.post(`${API_URL}/verify`, { OTP, email })
+            if (res.data?.token) {
+
+                set({ user: res.data?.user, token: res.data?.token, message: res.data?.message })
+                console.log(res.data)
+                localStorage.setItem('token', res.data?.token)
+                localStorage.setItem('user', JSON.stringify(res.data?.user))
+                return true
+            }
+            return false
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    },
     checkToken: async () => {
         try {
             const token = localStorage.getItem('token')
@@ -54,4 +87,5 @@ export const useAuthStore = create<{
             set({ isTokenValid: false, loading: false })
         }
     }
-}))
+
+}));
