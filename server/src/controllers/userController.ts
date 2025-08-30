@@ -59,3 +59,29 @@ export const GetVerified = async (req: Request, res: Response) => {
     res.json({ message: 'Wrong OTP' })
 
 }
+
+// ... existing code ...
+
+export const checkTokenValidity = async (req: Request, res: Response) => {
+    try {
+        // The requireAuth middleware already validates the token
+        // If we reach this point, the token is valid
+        const { email } = req.body;
+        const user = await UserModel.findOne({ email }).select('-passwordHash -OTP');
+        if (!user) {
+            return res.status(401).json({ message: "User not found", isValid: false });
+        }
+
+        return res.status(200).json({
+            message: "Token is valid",
+            isValid: true,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "Error checking token validity", isValid: false });
+    }
+};

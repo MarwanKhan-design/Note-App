@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { signup, login, GetVerified } from "../controllers/userController";
+import { signup, login, GetVerified, checkTokenValidity } from "../controllers/userController";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router = Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
 router.post('/verify', GetVerified)
+router.get('/check-token', requireAuth, checkTokenValidity);
 
 export default router;
 
