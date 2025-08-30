@@ -7,7 +7,7 @@ const router = Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post('/verify', GetVerified)
-router.get('/check-token', requireAuth, checkTokenValidity);
+router.post('/check-token', requireAuth, checkTokenValidity);
 
 export default router;
 

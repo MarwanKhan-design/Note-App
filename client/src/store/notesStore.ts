@@ -39,5 +39,5 @@ export const useNoteStore = create((set) => ({
             console.log(error)
         }
     }
-
+    
 }))
