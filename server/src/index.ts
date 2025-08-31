@@ -15,7 +15,7 @@ const app = express();
 
 
 // Middlewares
-app.use(cors({ origin: '*' }))
+app.use(cors({ origin: 'https://note-app-frontend-livid.vercel.app/' }))
 app.use(express.json());
 
 

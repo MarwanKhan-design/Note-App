@@ -27,7 +27,7 @@ router.get(
         );
 
         // Instead of cookies, redirect with token in query
-        const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+        const clientUrl = process.env.CLIENT_URL || "https://note-app-frontend-livid.vercel.app/";
         // Use & as separator for query params
         res.redirect(
             `${clientUrl}/auth/success?token=${encodeURIComponent(token)}&id=${encodeURIComponent(user._id)}&name=${encodeURIComponent(user.name)}&email=${encodeURIComponent(user.email)}`
