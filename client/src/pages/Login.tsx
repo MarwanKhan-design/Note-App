@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useAuthStore } from "../store/authStore"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import styles from "../styles/signup.module.css"   // ✅ reuse Signup CSS
 
 const Login = () => {
@@ -8,8 +8,6 @@ const Login = () => {
     const [OTPSent, setOTPSent] = useState(false)
     const [OTP, setOTP] = useState("")
     const [error, setError] = useState("")
-
-    const navigate = useNavigate()
 
     const { login, message, getToken } = useAuthStore() as any
 

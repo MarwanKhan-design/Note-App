@@ -5,13 +5,12 @@ import styles from '../styles/dashboard.module.css'
 import { useNoteStore } from "../store/notesStore"
 
 const Home = () => {
-    const { user, checkToken, isTokenValid, loading } = useAuthStore()
+    const { user, isTokenValid, loading } = useAuthStore()
     const { notes, getNotesOfUser } = useNoteStore() as any
 
     useEffect(() => {
-        checkToken()
         getNotesOfUser()
-    }, [checkToken])
+    }, [])
 
     if (loading) return <p>Loading...</p>
     if (!isTokenValid || !user) return <Navigate to="/login" />
