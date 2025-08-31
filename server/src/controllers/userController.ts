@@ -17,7 +17,7 @@ export const signup = async (req: Request, res: Response) => {
         await user.save();
 
 
-        sendOTPEmail(email as string, parseInt(otp))
+        await sendOTPEmail(email, parseInt(otp));
         return res.status(201).json({ message: 'Check Email For OTP' });
     } catch (_error) {
         return res.status(500).json({ message: "Failed to signup" });

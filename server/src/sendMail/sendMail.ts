@@ -1,24 +1,24 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-export async function sendOTPEmail(to: string, OTP: Number) {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.GOOGLE_MAIL,
-            pass: process.env.GOOGLE_APP_PASS, // use your Gmail App Password
-        },
-    });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const mailOptions = {
-        from: "your-email@gmail.com",
-        to: to,                // 👈 dynamic email here
-        subject: "OTP FOR NOTES INTERN PROJECT",      // 👈 dynamic subject
-        text: `Your OTP is ${OTP}`,         // 👈 dynamic message
-    };
+export async function sendOTPEmail(to: string, OTP: number) {
+    try {
+        const { data, error } = await resend.emails.send({
+            from: "Notes App <onboarding@resend.dev>", // ✅ replace with a verified sender
+            to: [to],
+            subject: "OTP FOR NOTES INTERN PROJECT",
+            html: `<p>Your OTP is <strong>${OTP}</strong></p>`,
+        });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent to:", to, "| Message ID:", info.messageId);
+        if (error) {
+            console.error("❌ Failed to send email:", error);
+            throw new Error(error.message);
+        }
+
+        console.log("✅ Email sent:", data?.id);
+    } catch (err) {
+        console.error("❌ Unexpected email error:", err);
+        throw err;
+    }
 }
-
-// Example usage:
-
