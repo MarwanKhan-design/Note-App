@@ -13,7 +13,9 @@ export async function sendOTPEmail(to: string, OTP: number) {
 
         if (error) {
             console.error("❌ Failed to send email:", error);
+            console.error("❌ Resend error:", JSON.stringify(error, null, 2));
             throw new Error(error.message);
+
         }
 
         console.log("✅ Email sent:", data?.id);
