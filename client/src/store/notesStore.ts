@@ -38,6 +38,20 @@ export const useNoteStore = create((set) => ({
         } catch (error) {
             console.log(error)
         }
+    },
+
+    deleteNote: async (id: string) => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            if (res.status === 200) {
+                set((state: any) => ({
+                    notes: state.notes.filter((note: any) => note._id !== id)
+                }));
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 }))

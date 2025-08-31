@@ -6,11 +6,15 @@ import { useNoteStore } from "../store/notesStore"
 
 const Home = () => {
     const { user, isTokenValid, loading } = useAuthStore()
-    const { notes, getNotesOfUser } = useNoteStore() as any
+    const { notes, getNotesOfUser, deleteNote } = useNoteStore() as any
 
     useEffect(() => {
         getNotesOfUser()
     }, [])
+
+    const handleDelete = (id: string) => {
+        deleteNote(id)
+    }
 
     if (loading) return <p>Loading...</p>
     if (!isTokenValid || !user) return <Navigate to="/login" />
@@ -39,12 +43,12 @@ const Home = () => {
                         {notes.map((note: any, idx: string) => (
                             <li key={idx} className={styles.noteItem}>
                                 <span>{note.title}</span>
-                                <button className={styles.deleteBtn}>🗑</button>
+                                <button className={styles.deleteBtn} onClick={() => handleDelete(note._id)}>Delete</button>
                             </li>
                         ))}
                     </ul>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
