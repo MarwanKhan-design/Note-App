@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useAuthStore } from "../store/authStore"
 import styles from "../styles/signup.module.css"
+import { Link } from "react-router-dom"
 
 const Signup = () => {
     const [email, setEmail] = useState("")
@@ -61,7 +62,7 @@ const Signup = () => {
                 </form>
 
                 <p className={styles.signin}>
-                    Already have an account?? <a href="#">Sign in</a>
+                    Already have an account?? <Link to="/login">Sign in</Link>
                 </p>
 
                 <p className={styles.message}>{message}</p>

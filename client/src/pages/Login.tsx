@@ -1,13 +1,15 @@
 import { useState } from "react"
 import { useAuthStore } from "../store/authStore"
-import { Navigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
+import styles from "../styles/signup.module.css"   // ✅ reuse Signup CSS
 
 const Login = () => {
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState("")
     const [OTPSent, setOTPSent] = useState(false)
-    const [OTP, setOTP] = useState('')
-    const [redirect, setRedirect] = useState(false)
-    const [error, setError] = useState('')
+    const [OTP, setOTP] = useState("")
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate()
 
     const { login, message, getToken } = useAuthStore() as any
 
@@ -20,29 +22,56 @@ const Login = () => {
     const handleToken = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const success = await getToken(parseInt(OTP), email)
-        if (success) {
-            setRedirect(true)
-        } else {
-            setError('Invalid OTP')
+        if (!success) {
+            setError("Invalid OTP")
         }
     }
 
-    if (redirect) return <Navigate to={'/'} />
+    return (
+        <div className={styles.container}>
+            <div className={styles.left}>
+                <h2>Login</h2>
+                <p>Login with your email and OTP</p>
 
-    return <>
-        <form>
-            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <form className={styles.form}>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
+                    />
 
-            {OTPSent ? <>
-                <input type="number" value={OTP} onChange={(e) => setOTP(e.target.value)} />
-                <button onClick={handleToken}>Login</button>
-            </> : <>
-                <button onClick={handleLogin}>Get OTP</button>
-                <p>{error}</p>
-            </>}
-        </form>
-        <p>{message}</p>
-    </>
+                    {OTPSent ? (
+                        <>
+                            <input
+                                type="number"
+                                value={OTP}
+                                onChange={(e) => setOTP(e.target.value)}
+                                placeholder="Enter OTP"
+                            />
+                            <button onClick={handleToken} className={styles.btn}>
+                                Login
+                            </button>
+                        </>
+                    ) : (
+                        <button onClick={handleLogin} className={styles.btn}>
+                            Get OTP
+                        </button>
+                    )}
+
+                    {error && <p className={styles.message}>{error}</p>}
+                </form>
+
+                <p className={styles.signin}>
+                    Don't have an account? <Link to="/signup">Sign up</Link>
+                </p>
+
+                <p className={styles.message}>{message}</p>
+            </div>
+
+            <div className={styles.right}></div>
+        </div>
+    )
 }
 
 export default Login

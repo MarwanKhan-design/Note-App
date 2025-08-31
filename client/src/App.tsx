@@ -4,11 +4,13 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import CreateNotes from './pages/CreateNotes'
 import PrivateRoute from './components/PrivateRoute'
+import Navbar from './components/Navbar'
 
 function App() {
 
   return (
     <>
+      <Navbar />
       <Routes>
         <Route path='/' element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path='/create/note' element={<PrivateRoute><CreateNotes /></PrivateRoute>} />

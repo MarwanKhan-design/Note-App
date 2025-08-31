@@ -17,6 +17,7 @@ export const useAuthStore = create<{
     login: (email: string) => Promise<void>;
     getToken: (OTP: number, email: string) => Promise<boolean | undefined>;
     checkToken: () => Promise<void>;
+    signOut: () => void;
     loading: boolean;
 }>((set) => ({
     loading: true,
@@ -86,6 +87,10 @@ export const useAuthStore = create<{
             console.log(error)
             set({ isTokenValid: false, loading: false })
         }
+    },
+    signOut: () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        set({ user: null, token: '', isTokenValid: false })
     }
-
 }));
