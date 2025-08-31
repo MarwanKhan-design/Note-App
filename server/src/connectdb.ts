@@ -1,11 +1,21 @@
 import mongoose from "mongoose";
 
-export const connectdb = async (URI: string) => {
+let isConnected = false;
+
+export const connectdb = async (uri: string) => {
+    if (isConnected) return;
+
     try {
-        const conn = await mongoose.connect(URI);
-        console.log("DB connected", conn.connection.host);
-    } catch (error) {
-        console.log("Error Connecting to DB", error);
-        process.exit(1);
+        const db = await mongoose.connect(uri, {
+            // recommended options
+            serverSelectionTimeoutMS: 5000, // fail fast if DB unreachable
+            maxPoolSize: 10,                // cap connections
+        });
+
+        isConnected = !!db.connections[0].readyState;
+        console.log("✅ MongoDB connected");
+    } catch (err) {
+        console.error("❌ DB connection error:", err);
+        throw new Error("Failed to connect to MongoDB");
     }
-}
+};
