@@ -1,19 +1,20 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
 import { IUser, UserModel } from "./models/User";
+import jwt from "jsonwebtoken";
 
 passport.use(
     new GoogleStrategy(
         {
             clientID: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-            callbackURL: "/api/auth/google/callback"
+            callbackURL: process.env.GOOGLE_CALLBACK_URL || "/api/auth/google/callback", // important for Vercel
         },
         async (
             accessToken: string,
             refreshToken: string,
             profile: Profile,
-            done: (err: any, user?: any, info?: any) => void
+            done: (err: any, user?: any) => void
         ) => {
             try {
                 let user: IUser | null = await UserModel.findOne({ googleId: profile.id });
@@ -23,29 +24,25 @@ passport.use(
                         googleId: profile.id,
                         email: profile.emails?.[0]?.value || "",
                         name: profile.displayName,
-                        picture: profile.photos?.[0]?.value
+                        picture: profile.photos?.[0]?.value,
                     });
                 }
 
-                return done(null, user);
+                // ✅ Instead of session, create JWT
+                if (user) {
+                    const token = jwt.sign(
+                        { id: user._id, email: user.email },
+                        process.env.JWT_SECRET!,
+                        { expiresIn: "7d" }
+                    );
+                    return done(null, { user, token });
+                }
+                return done(null, false);
             } catch (error) {
                 return done(error, undefined);
             }
         }
     )
 );
-
-passport.serializeUser((user: any, done) => {
-    done(null, user.id); // only store user ID in session
-});
-
-passport.deserializeUser(async (id: string, done) => {
-    try {
-        const user = await UserModel.findById(id);
-        done(null, user || false);
-    } catch (error) {
-        done(error, false);
-    }
-});
 
 export default passport;

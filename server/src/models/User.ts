@@ -1,4 +1,4 @@
-import { Schema, model, models, InferSchemaType } from "mongoose";
+import { Schema, model, models, InferSchemaType, Document } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -8,6 +8,7 @@ export interface IUser extends Document {
     email: string;
     name: string;
     OTP: number;
+    _id: string;
 }
 
 
