@@ -27,6 +27,52 @@
     margin-bottom: 30px;
 }
 
+.googleBtn {
+    width: 100%;
+    background: #fff;
+    color: #333;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.googleBtn:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+}
+
+.divider span {
+    background: #fff;
+    padding: 0 15px;
+    color: #666;
+    font-size: 14px;
+}
+
 .form {
     display: flex;
     flex-direction: column;

@@ -25,11 +25,28 @@ const Login = () => {
         }
     }
 
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:4000/api/auth/google";
+        // backend route that triggers passport
+    };
+
+
     return (
         <div className={styles.container}>
             <div className={styles.left}>
                 <h2>Login</h2>
                 <p>Login with your email and OTP</p>
+
+                <button
+                    onClick={handleGoogleLogin}
+                    className={styles.googleBtn}
+                >
+                    Continue with Google
+                </button>
+
+                <div className={styles.divider}>
+                    <span>or</span>
+                </div>
 
                 <form className={styles.form}>
                     <input

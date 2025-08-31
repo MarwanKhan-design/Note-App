@@ -2,13 +2,21 @@ import { Schema, model, models, InferSchemaType } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const SALT_WORK_FACTOR = 10;
+
+export interface IUser extends Document {
+    googleId: string;
+    email: string;
+    name: string;
+    OTP: number;
+}
+
 
 const userSchema = new Schema(
     {
         name: { type: String, required: true, trim: true },
         email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-        OTP: { type: Number }
+        OTP: { type: Number },
+        googleId: { type: String, unique: true },
     },
     { timestamps: true }
 );

@@ -8,6 +8,7 @@ import Navbar from './components/Navbar'
 import PublicRoute from './components/PublicRoute'
 import { useAuthStore } from './store/authStore'
 import { useEffect } from 'react'
+import AuthSuccess from './pages/AuthSuccess'
 
 function App() {
   const { checkToken, token } = useAuthStore()
@@ -24,6 +25,8 @@ function App() {
         <Route path='/create/note' element={<PrivateRoute><CreateNotes /></PrivateRoute>} />
         <Route path='/login' element={<PublicRoute> <Login /></PublicRoute>} />
         <Route path='/signup' element={<PublicRoute> <Signup /></PublicRoute>} />
+        <Route path="/auth/success" element={<AuthSuccess />} />
+
       </Routes>
     </>
   )

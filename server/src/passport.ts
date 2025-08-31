@@ -1,38 +1,51 @@
-import GoogleStrategy from 'passport-google-oauth20'
-import passport from 'passport'
+import passport from "passport";
+import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
+import { IUser, UserModel } from "./models/User";
 
-const googleStrategy = GoogleStrategy.Strategy
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            callbackURL: "/api/auth/google/callback"
+        },
+        async (
+            accessToken: string,
+            refreshToken: string,
+            profile: Profile,
+            done: (err: any, user?: any, info?: any) => void
+        ) => {
+            try {
+                let user: IUser | null = await UserModel.findOne({ googleId: profile.id });
 
-passport.use(new googleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID!,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: "/api/auth/google/callback"
-}, async (accessToken, refreshToken, profile, done) => {
-    try {
-        // Here you would typically:
-        // 1. Check if user exists in your database
-        // 2. Create new user if they don't exist
-        // 3. Return the user object
+                if (!user) {
+                    user = await UserModel.create({
+                        googleId: profile.id,
+                        email: profile.emails?.[0]?.value || "",
+                        name: profile.displayName,
+                        picture: profile.photos?.[0]?.value
+                    });
+                }
 
-        const user = {
-            googleId: profile.id,
-            email: profile.emails?.[0]?.value,
-            name: profile.displayName,
-            picture: profile.photos?.[0]?.value
+                return done(null, user);
+            } catch (error) {
+                return done(error, undefined);
+            }
         }
-
-        return done(null, user)
-    } catch (error) {
-        return done(error as Error, false)
-    }
-}))
+    )
+);
 
 passport.serializeUser((user: any, done) => {
-    done(null, user)
-})
+    done(null, user.id); // only store user ID in session
+});
 
-passport.deserializeUser((user: any, done) => {
-    done(null, user || false)
-})
+passport.deserializeUser(async (id: string, done) => {
+    try {
+        const user = await UserModel.findById(id);
+        done(null, user || false);
+    } catch (error) {
+        done(error, false);
+    }
+});
 
-export default passport
+export default passport;
