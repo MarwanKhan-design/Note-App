@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/auth";
+const API_URL = "https://note-app-seven-azure.vercel.app/api/auth";
 
 interface User {
     name: String,
