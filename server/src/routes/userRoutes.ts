@@ -17,7 +17,7 @@ router.get(
     "/google/callback",
     passport.authenticate("google", { session: false, failureRedirect: "/login" }),
     (req: any, res) => {
-        const { user, token } = req.user; // 👈 Destructure properly
+        const { user, token } = req.user as any // 👈 Destructure properly
 
         const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
         res.redirect(
