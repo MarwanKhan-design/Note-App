@@ -26,7 +26,7 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = "https://note-app-seven-azure.vercel.app/api/auth/google";
+        window.location.href = "https://note-app-pearl-nine.vercel.app/api/auth/google";
         // backend route that triggers passport
     };
 
