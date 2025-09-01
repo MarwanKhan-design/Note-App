@@ -19,7 +19,7 @@ router.get(
     (req: any, res) => {
         const { user, token } = req.user as any // 👈 Destructure properly
 
-        const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+        const clientUrl = process.env.GOOGLE_CALLBACK_URL || "http://localhost:5173";
         res.redirect(
             `${clientUrl}/auth/success?token=${encodeURIComponent(token)}&id=${encodeURIComponent(user._id)}&name=${encodeURIComponent(user.name)}&email=${encodeURIComponent(user.email)}`
         );
