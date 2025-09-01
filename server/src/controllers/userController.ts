@@ -36,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
         user.OTP = otp
         user.save()
 
-        sendOTPEmail(email as string, parseInt(otp))
+        await sendOTPEmail(email as string, parseInt(otp))
 
         return res.status(200).json({ message: "Check Email for OTP" });
     } catch (_error) {

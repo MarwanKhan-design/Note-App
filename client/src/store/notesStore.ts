@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "https://note-app-seven-azure.vercel.app/api/notes";
+const API_URL = "https://note-app-pearl-nine.vercel.app/api/notes";
 
 interface Note {
     title: String,
